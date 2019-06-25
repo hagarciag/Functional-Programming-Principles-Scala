@@ -1,0 +1,124 @@
+def square(x:Double) = x*x
+
+square(2)
+
+square(5+4)
+
+square(square(4))
+
+//Function parameters come with their type, which is given after a colon
+//If a return type is given, it follows the parameter list. Primitive types are as in Java, but are written capitalized: Int, Double, Boolean
+def sumOfSquares(x: Double, y: Double )= square(x) + square(y)
+
+//Applications of parametrized fnctions are evaluated in asimilar way as operators:
+//1. Evaluate al funtion arguments, from left to right.
+//2. Replace the function application by the function's right-hand side, and, at the same time
+//3. Replace the formal parameters of the function by the actual arguments.
+sumOfSquares(3, 2+2)
+sumOfSquares(3, 4)
+square(3) + square(4)
+//3+3 + ...
+
+//Call-by-name and call-by-value
+//If CBV evaluation of an expression e terminates, then CBN evaluation of e terminates too.
+//The other way is not true
+def first(x:Int, y:Int)=x
+
+def loop:Int=loop
+//CBN
+first(1, loop)
+
+//CBV -- It does not finish never
+first(1, loop)
+
+//Scala normally uses call-by-value
+//But if the type of a function parameters stars with => it uses call-by-name
+
+//Example:
+def constOne(x:Int, y:=>Int)=1
+
+//By name
+constOne(1+2,loop) //1
+//First paramter is called by value and the second by name, so the fnction runs without problem
+constOne(loop,1+2) //infinite loop
+//Both parameters are reduceb by value, so the function enters in an infinite loop
+
+//1-4--------------------------------------------------------------------
+//Conditional Expressions
+def abs(x:Int) = if (x >= 0) x else -x
+def abs(x:Double): Double = if (x >= 0) x else -x
+
+//&& and || do not always need their right operand to be evaluated.
+
+//Value definitions
+//We have seen that the function parameters can be passes by value or passed by name.
+//The same distinction applies to definitions.
+//The def form is "by-name", its right hand side is evaluated on each use.
+//There is also a val for, which is "by-vale". Example:
+val x = 2
+val y = square(x)
+
+//The right-hand side of a val definition is evaluated at the point of the definitn itself.
+//Afterwards, the name refers to the value.
+//For instance, y above refers to 4, not to square(2)
+
+
+//1.5 Example: square roots with Newton's method
+
+def isGoodEnough(guess: Double, x: Double): Boolean =
+  abs(guess*guess - x) / x   < 0.001
+
+def improve(guess: Double, x: Double):Double =
+  (guess + x / guess) / 2
+
+//sqrtIter is recursive because ti calls itself. This type of function needs an explicit return type, for non-recursive the return type is optiona
+def sqrtIter(guess: Double, x: Double):Double =
+  if(isGoodEnough(guess, x)) guess
+  else(sqrtIter((improve(guess, x),x)
+
+ 
+def sqrt(x:Double) = sqrtIter(1.0, x)
+
+sqrt(2)
+
+//1.6 Blocks --------------------------------------------------------------
+
+
+def abs(x:Double): Double = if (x >= 0) x else -x
+
+def sqrt(x:Double) = {
+
+//sqrtIter is recursive because ti calls itself. This type of function needs an explicit return type, for non-recursive the return type is optiona
+def sqrtIter(guess: Double, x: Double):Double =
+  if(isGoodEnough(guess, x)) guess
+  else(sqrtIter((improve(guess, x),x)
+
+def isGoodEnough(guess: Double, x: Double): Boolean =
+  abs(guess*guess - x) / x   < 0.001
+
+def improve(guess: Double, x: Double):Double =
+  (guess + x / guess) / 2
+  
+sqrtIter(1.0, x)
+
+ }
+
+//We can eliminate redundant parameter x
+
+def sqrt(x:Double) = {
+
+//sqrtIter is recursive because ti calls itself. This type of function needs an explicit return type, for non-recursive the return type is optiona
+def sqrtIter(guess: Double):Double =
+  if(isGoodEnough(guess)) guess
+  else(sqrtIter((improve(guess),x)
+
+def isGoodEnough(guess: Double): Boolean =
+  abs(guess*guess - x) / x   < 0.001
+
+def improve(guess: Double):Double =
+  (guess + x / guess) / 2
+  
+sqrtIter(1.0)
+
+ }
+
