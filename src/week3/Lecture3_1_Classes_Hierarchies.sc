@@ -2,8 +2,84 @@
 
 object Lecture3_1_Classes_Hierarchies {
   //new IntSet()   //IntSet is abstract, so it cannot be instatiated
-  val t1 = new NonEmpty(3, new Empty, new Empty)  //> t1  : NonEmpty = {.3.}
-  val t2 = t1 incl 4                              //> t2  : IntSet = {.3{.4.}}
+  val a_1_1 = new NonEmpty(4, new Empty, new Empty)
+                                                  //> a_1_1  : NonEmpty = {.4.}
+
+  val a_1_2 = a_1_1 incl 1                        //> new NonEmpty(4, [.] incl 1, [.])
+                                                  //| new NonEmpty(1, [.], [.])
+                                                  //| a_1_2  : IntSet = {{.1.}4.}
+
+  val a_1_3 = a_1_2 incl 7                        //> new NonEmpty(4, [{.1.}], [.] incl 7)
+                                                  //| new NonEmpty(7, [.], [.])
+                                                  //| a_1_3  : IntSet = {{.1.}4{.7.}}
+
+  val a_2_1 = new NonEmpty(3, new Empty, new Empty)
+                                                  //> a_2_1  : NonEmpty = {.3.}
+
+  val a_2_2 = a_2_1 incl 2                        //> new NonEmpty(3, [.] incl 2, [.])
+                                                  //| new NonEmpty(2, [.], [.])
+                                                  //| a_2_2  : IntSet = {{.2.}3.}
+
+  val a_2_3 = a_2_2 incl 5                        //> new NonEmpty(3, [{.2.}], [.] incl 5)
+                                                  //| new NonEmpty(5, [.], [.])
+                                                  //| a_2_3  : IntSet = {{.2.}3{.5.}}
+
+  val t6 = a_1_3 union a_2_3                      //> (([{.1.}] union [{.7.}]) union [{{.2.}3{.5.}}]) incl 4
+                                                  //| (([.] union [.]) union [{.7.}]) incl 1
+                                                  //| [.]
+                                                  //| [{.7.}]
+                                                  //| new NonEmpty(7, [.] incl 1, [.])
+                                                  //| new NonEmpty(1, [.], [.])
+                                                  //| (([{.1.}] union [.]) union [{{.2.}3{.5.}}]) incl 7
+                                                  //| (([.] union [.]) union [.]) incl 1
+                                                  //| [.]
+                                                  //| [.]
+                                                  //| new NonEmpty(1, [.], [.])
+                                                  //| (([.] union [.]) union [{{.2.}3{.5.}}]) incl 1
+                                                  //| [.]
+                                                  //| [{{.2.}3{.5.}}]
+                                                  //| new NonEmpty(3, [{.2.}] incl 1, [{.5.}])
+                                                  //| new NonEmpty(2, [.] incl 1, [.])
+                                                  //| new NonEmpty(1, [.], [.])
+                                                  //| new NonEmpty(3, [{{.1.}2.}], [{.5.}] incl 7)
+                                                  //| new NonEmpty(5, [.], [.] incl 7)
+                                                  //| new NonEmpty(7, [.], [.])
+                                                  //| new NonEmpty(3, [{{.1.}2.}], [{.5{.7.}}] incl 4)
+                                                  //| new NonEmpty(5, [.] incl 4, [{.7.}])
+                                                  //| new NonEmpty(4, [.], [.])
+                                                  //| t6  : IntSet = {{{.1.}2.}3{{.4.}5{.7.}}}
+
+
+
+
+  val t_1 = new NonEmpty(7, new Empty, new Empty) //> t_1  : NonEmpty = {.7.}
+
+  val t0 = new NonEmpty(3, new Empty, new Empty)  //> t0  : NonEmpty = {.3.}
+
+  val t1 = t0 incl 6                              //> new NonEmpty(3, [.], [.] incl 6)
+                                                  //| new NonEmpty(6, [.], [.])
+                                                  //| t1  : IntSet = {.3{.6.}}
+
+  val t2 = t1 incl 4                              //> new NonEmpty(3, [.], [{.6.}] incl 4)
+                                                  //| new NonEmpty(6, [.] incl 4, [.])
+                                                  //| new NonEmpty(4, [.], [.])
+                                                  //| t2  : IntSet = {.3{{.4.}6.}}
+
+  val t3 = t2 incl 9                              //> new NonEmpty(3, [.], [{{.4.}6.}] incl 9)
+                                                  //| new NonEmpty(6, [{.4.}], [.] incl 9)
+                                                  //| new NonEmpty(9, [.], [.])
+                                                  //| t3  : IntSet = {.3{{.4.}6{.9.}}}
+
+  val t4 = t3 incl 2                              //> new NonEmpty(3, [.] incl 2, [{{.4.}6{.9.}}])
+                                                  //| new NonEmpty(2, [.], [.])
+                                                  //| t4  : IntSet = {{.2.}3{{.4.}6{.9.}}}
+
+  val t5 = t4 incl 10                             //> new NonEmpty(3, [{.2.}], [{{.4.}6{.9.}}] incl 10)
+                                                  //| new NonEmpty(6, [{.4.}], [{.9.}] incl 10)
+                                                  //| new NonEmpty(9, [.], [.] incl 10)
+                                                  //| new NonEmpty(10, [.], [.])
+                                                  //| t5  : IntSet = {{.2.}3{{.4.}6{.9{.10.}}}}
+
 
 }
 
@@ -26,25 +102,30 @@ abstract class IntSet {
 
 class Empty extends IntSet {
   def contains(x: Int): Boolean = false
-  def incl(x: Int): IntSet = new NonEmpty(x, new Empty, new Empty)
+  def incl(x: Int): IntSet = { println("new NonEmpty(" + x + ", [.], [.])"); new NonEmpty(x, new Empty, new Empty) }
   override def toString = "."
-  def union(other: IntSet): IntSet = other
+  def union(other: IntSet): IntSet = { println("[" + other + "]"); other }
 }
 
 class NonEmpty(elem: Int, left: IntSet, right: IntSet) extends IntSet {
-  def contains(x: Int): Boolean =
+  def contains(x: Int): Boolean = {
     if (x < elem) left contains x
     else if (x > elem) right contains x
     else true
-
-  def incl(x: Int): IntSet =
-    if (x < elem) new NonEmpty(elem, left incl x, right)
-    else if (x > elem) new NonEmpty(elem, left, right incl x)
-    else this
-
+  }
+  def incl(x: Int): IntSet = {
+    if (x < elem) {
+      println("new NonEmpty(" + elem + ", [" + left + "] incl " + x + ", [" + right + "])")
+      new NonEmpty(elem, left incl x, right)
+    } else if (x > elem) {
+      println("new NonEmpty(" + elem + ", [" + left + "]" + ", [" + right + "] incl " + x + ")"); new NonEmpty(elem, left, right incl x)
+    } else { println("This " + this.toString()); this }
+  }
   override def toString = "{" + left + elem + right + "}"
-  def union(other: IntSet): IntSet =
+  def union(other: IntSet): IntSet = {
+    println("(([" + left + "] union [" + right + "]) union [" + other + "]) incl " + elem);
     ((left union right) union other) incl elem
+  }
 }
 
 //Empty and NonEmpty both extend the class IntSet.
