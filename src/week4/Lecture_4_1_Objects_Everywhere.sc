@@ -1,21 +1,21 @@
 //Peano numbers
 package week4
 
-class Succ(n: Nat) extends Nat{
-	def isZero = false
-	def predecessor = n
-	def +(that: Nat) = new Succ(n + that)
-	def -(that: Nat) = if(that.isZero) this else n - that.predecessor
+class Succ(n: Nat) extends Nat {
+  def isZero = false
+  def predecessor = n
+  def +(that: Nat) = new Succ(n + that)
+  def -(that: Nat) = if (that.isZero) this else n - that.predecessor
 }
-
+/*
 abstract class Nat {
-	def isZero:Boolean
-	def predecessor: Nat
-	def successor = new Succ(this)
-	def +(that: Nat): Nat
-	def -(that: Nat): Nat
+  def isZero: Boolean
+  def predecessor: Nat
+  def successor = new Succ(this)
+  def +(that: Nat): Nat
+  def -(that: Nat): Nat
 }
-
+*/
 //This code is commented because it generates an error uncommented. When it is put in separated classes it does not show error
 /*
 object Zero extends Nat {

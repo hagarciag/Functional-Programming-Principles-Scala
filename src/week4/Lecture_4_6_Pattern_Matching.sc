@@ -54,4 +54,5 @@ object Lecture_4_6_Pattern_Matching {
 		}
 	}
 	*/
+	val a = 1                                 //> a  : Int = 1
 }

@@ -1,5 +1,6 @@
 package week1
 
+
 object Lecture_1_4_Elements_Programming {
   
  //1.4--------------------------------------------------------------------
@@ -16,7 +17,7 @@ object Lecture_1_4_Elements_Programming {
   //The def form is "by-name", its right hand side is evaluated on each use.
   //There is also a val for, which is "by-vale". Example:
   val x = 2                                       //> x  : Int = 2
-  val y = square(x)                               //> y  : Double = 4.0
+  //val y = square(x)
 
   //The right-hand side of a val definition is evaluated at the point of the definitn itself.
   //Afterwards, the name refers to the value.
